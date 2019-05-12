@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="el">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<title>mercury.gov</title>
+		<link href="img/icon-bg.png" rel="icon">
+		<link href="css/bootstrap.min.css" rel="stylesheet">
+		<link href="css/font-awesome.min.css" rel="stylesheet">
+		<link href="css/mystyles.css" rel="stylesheet">
+	</head>
+	<body>
+		<header>
+			<nav class="navbar fixed-top mynav">
+				<a class="navbar-brand" href="#"><img src="img/icon.png" height="30"/> <span id="brand-text">mercury.gov</span></a>
+				<div class="my-2 my-sm-0 mt-2 mt-md-0">
+					<!--<span class="pr-2">John Doe</span>-->
+					<button class="btn btn-outline-my"><span class="fa fa-download"></span> Λήψη</button>
+				</div>
+			</nav>
+		</header>
+		<main>
+			<div class="mt-bn">
+				<div id="map" class="center float-left"></div>
+				<div class="float-right" id="side">
+					<div id="feed-header">
+						<div class="container">
+							<div class="row">
+								<div class="col-4">
+								</div>
+								<div class="col-4">
+									<!--<button class="btn btn-my float-right" style="margin-top:15%" data-toggle="modal" data-target="#case-modal">Αναφορά</button>-->
+								</div>
+							</div>
+						</div>	
+					</div>
+					<div  id="feed">
+						<ul class="list-group list-group-flush" id="feed-list">
+							<!--<li class="list-group-item list-group-item-action feed-item cursor-pointer" data-toggle="modal" data-target="#case-modal">
+								<div class="text-center">
+									<img src="img/lamp.png" height="160px">
+								</div>
+								<div class="mt-1">Καμμένη λάμπα στην οδό ταδε.</div>
+								<div class="feed-bottom">
+									<small class="float-left">05/05/2019 - 09:45</small>
+									<button class="btn btn-my float-right feed-button" data-toggle="modal" data-target="#case-modal">Προβολή</button>
+								</div>
+							</li>-->
+						</ul>
+					</div>
+					<div id="footer">
+						<div class="text-center">copyright</div>
+					</div>
+				</div>
+				
+			</div>
+			<div class="modal fade bd-example-modal-lg" id="case-modal" tabindex="-1" role="dialog">
+				<div class="modal-dialog modal-lg" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title">Προβολή Προβλήματος</h5>
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body m-0 p-0">
+							<div class="container-fluid m-0 p-0">
+								<img src="img/lamp.png" id="modal-image"></img>
+								<div id="case-info" class="px-5 mt-2">
+									<h5>Περιγραφή</h5>
+									<p id="desc">Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.</p>
+									<h5>Τοποθεσία</h5>
+									<p id="loc">Αχαρνών 4, 10445, Δήμος Αθηναίων</p>
+									<h5>Ημερομηνία Αναφοράς</h5>
+									<p id="date">05/05/2019 - 09:30</p>
+									<h5>Κατάσταση</h5>
+									<p id="state">Υπό εξέταση</p>
+								</div>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button class="btn btn-my" data-dismiss="modal">Κλείσιμο</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</main>
+		<script src="https://www.gstatic.com/firebasejs/6.0.2/firebase-app.js"></script>
+		<script src="https://www.gstatic.com/firebasejs/6.0.2/firebase-firestore.js"></script>
+		<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCCSSBVEFtL16TjRY_ISxjE_0U6Q5-UpgY&callback=myMap"></script>
+		<script>
+			// Your web app's Firebase configuration
+			var firebaseConfig = {
+				apiKey: "AIzaSyDdmBpA5AtZW93Xv5hwQfRplfQlbVXEZko",
+				authDomain: "readyaimfireproject.firebaseapp.com",
+				databaseURL: "https://readyaimfireproject.firebaseio.com",
+				projectId: "readyaimfireproject",
+				storageBucket: "readyaimfireproject.appspot.com",
+				messagingSenderId: "1036997362149",
+				appId: "1:1036997362149:web:aa29322682be7ab7"
+			};
+			// Initialize Firebase
+			firebase.initializeApp(firebaseConfig);
+			var db = firebase.firestore();
+		</script>
+		<script>
+			var map;
+			var request = new XMLHttpRequest();
+			var data;
+			var dict = {};
+			request.open('GET', 'http://172.16.220.154:3000/api/VolunteerIssue', true);
+			request.onload = function() {
+				data = JSON.parse(this.response);
+				data.sort(function(a, b){return b.submission_time - a.submission_time;});
+				
+				if (request.status >= 200 && request.status < 400) {
+					var myStyles =[
+						{
+							featureType: "poi",
+							elementType: "labels",
+							stylers: [
+								{ visibility: "off" }
+							]
+						}
+					];
+					var mapOptions = {
+						center:new google.maps.LatLng(data[0].lat,data[0].lng),
+						zoom: 8,
+						mapTypeId: google.maps.MapTypeId.ROADMAP,
+						mapTypeControl: false,
+						streetViewControl: false,
+						styles: myStyles 
+					}
+					map = new google.maps.Map(document.getElementById("map"), mapOptions);
+					data.forEach(issue => {
+						var icon = {
+							url: 'img/' + issue.category + '-icon.png',
+							scaledSize: new google.maps.Size(35, 35)
+						}
+						var marker = new google.maps.Marker({position: new google.maps.LatLng(issue.lat,issue.lng), icon: icon});
+						marker.setMap(map);
+					});
+					//var x = 0;
+					data.forEach(issue => {
+						var x = issue.issue_id;
+						dict[x] = issue;
+						
+						var datetime = formatdate(new Date(parseInt(issue.submission_time)));
+						$("#feed-list").append('<li class="list-group-item list-group-item-action feed-item cursor-pointer" data-toggle="modal" data-target="#case-modal"><div class="text-center"><img id="'+x+'" src="img/lamp.png" height="160px"></div><div class="mt-1">' + issue.comments + '</div><div class="feed-bottom"><small class="float-left">' + datetime + '</small><button class="btn btn-my float-right" id="' + x.toString() + '" data-toggle="modal" data-target="#case-modal">Προβολή</button></div></li>');
+						
+						db.collection("issue").doc(issue.issue_id).get().then(function(doc) {
+							if (doc.exists) {
+								var pic = doc.data().image.toString();
+								var image = $("img#" + x);
+								
+								console.log(image.attr('id'));
+								image.attr('src', 'data:image/png;base64,' + pic);
+								//console.log(pic);
+								dict[x].photo = pic;
+								//dict.push({Key:"pic",value:pic.toString()});
+							} else {
+								// doc.data() will be undefined in this case
+								console.log("No such document!");
+							}
+						}).catch(function(error) {
+							console.log("Error getting document:", error);
+						});
+						var cb = $("button#" + x);
+						cb.click(function(){
+							$("#modal-image").attr('src', 'data:image/png;base64,' + dict[cb.attr('id')].photo);
+							$("#desc").text(dict[cb.attr('id')].comments);
+							$("#loc").text(dict[cb.attr('id')].address);
+							$("#date").text(formatdate(new Date(parseInt(dict[cb.attr('id')].submission_time))));
+							$("#state").text(dict[cb.attr('id')].status);
+						});
+						cb.parent().parent().click(function(){
+							$("#modal-image").attr('src', 'data:image/png;base64,' + dict[cb.attr('id')].photo);
+							$("#desc").text(dict[cb.attr('id')].comments);
+							$("#loc").text(dict[cb.attr('id')].address);
+							$("#date").text(formatdate(new Date(parseInt(dict[cb.attr('id')].submission_time))));
+							$("#state").text(dict[cb.attr('id')].status);
+						});
+						//x += 1;
+					});
+				} else {
+					console.log('error');
+				}
+			};
+
+			request.send();
+			
+			function formatdate(datetime){
+				return datetime.getDate() + "/" + (parseInt(datetime.getMonth()) + 1)	 + "/" + datetime.getFullYear() + " - " + datetime.getHours() + ":" + datetime.getMinutes(); 
+			};
+			
+			function formatloc(address, municipality){
+				var x = address.split(',');
+				var y = x[1].split(' ');
+				return x[0] + ', ' + y[1] + ' ' + y[2] + ', ' + municipality;
+			};
+			//Sat May 11 20:05:28 GMT+03:00 2019
+		</script>
+		<script src="js/jquery-3.4.0.min.js"></script>
+		<script src="js/bootstrap.bundle.min.js"></script>
+	</body>
+</html>

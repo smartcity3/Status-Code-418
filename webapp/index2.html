@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="el">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<title>mercury.gov</title>
+		<link href="img/icon-bg.png" rel="icon">
+		<link href="css/bootstrap.min.css" rel="stylesheet">
+		<link href="css/font-awesome.min.css" rel="stylesheet">
+		<link href="css/mystyles2.css" rel="stylesheet">
+	</head>
+	<body>
+		<header>
+			<nav class="navbar fixed-top mynav">
+				<a class="navbar-brand" href="#"><img src="img/icon.png" height="30"/> <span style="font-size:95%" id="brand-text">mercury.gov</span></a>
+				<div class="my-2 my-sm-0 mt-2 mt-md-0">
+					<span class="pr-2">John Doe</span>
+					<button class="btn btn-outline-my"><span class="fa fa-sign-out"></span> Έξοδος</button>
+				</div>
+			</nav>
+		</header>
+		
+		<main class="mt-bn">
+			<div class="container">
+				<ul class="list-group list-group-flush">
+					<li class="list-group-item list-group-item-my text-center">
+						<div class="row">
+							<div class="col-3">Ημερομηνία</div>
+							<div class="col-3">Ώρα</div>
+							<div class="col-3">Τοποθεσία</div>
+							<div class="col-3">Τύπος</div>
+						</div>
+					</li>
+					<div class="list-group-body">
+						<!--<li class="list-group-item list-group-item-action text-center cursor-pointer" data-toggle="modal" data-target="#case-modal">
+							<div class="row">
+								<div class="col-3">05/05/2019</div>
+								<div class="col-3">15:30</div>
+								<div class="col-3">Πατησίων 7, 10445, Αθήνα</div>
+								<div class="col-3">Οδική Ζημιά</div>
+							</div>
+						</li>-->
+					</div>
+				</ul>
+			</div>
+			<div class="modal fade bd-example-modal-lg" id="case-modal" tabindex="-1" role="dialog">
+				<div class="modal-dialog modal-lg" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title">Προβολή Προβλήματος</h5>
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body m-0 p-0">
+							<div class="container-fluid m-0 p-0">
+								<img src="img/lamp.png" id="modal-image"></img>
+								<div id="case-info" class="px-5 mt-2">
+									<h5>Περιγραφή</h5>
+									<p>
+										<textarea class="form-control" id="desc" name="desc">Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of 'de Finibus Bonorum et Malorum'(The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum,, comes from a line in section 1.10.32.
+										</textarea>
+										<button class="btn btn-my float-right mt-3">Εκκαθάριση</button>
+									</p>
+									<h5 style="margin-top:75px">Τοποθεσία</h5>
+									<p id="loc">Αχαρνών 4, 10445, Δήμος Αθηναίων</p>
+									<p><div id="map" class="center"></div></p>
+									<h5>Ημερομηνία Αναφοράς</h5>
+									<p id="date">05/05/2019 - 09:30</p>
+									<h5>Κατάσταση</h5>
+									<p id="state">Υπό εξέταση</p>
+								</div>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button class="btn btn-my" data-dismiss="modal">Κλείσιμο</button>
+							<button class="btn btn-danger" data-dismiss="modal"><span class="fa fa-close"></span> Απόρριψη</button>
+							<button class="btn btn-success" data-dismiss="modal"><span class="fa fa-check"></span> Έγκριση</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</main>
+		
+		<footer id="page-footer">
+			<p>copyright</p>
+		</footer>
+		
+		<script src="https://www.gstatic.com/firebasejs/6.0.2/firebase-app.js"></script>
+		<script src="https://www.gstatic.com/firebasejs/6.0.2/firebase-firestore.js"></script>
+		<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCCSSBVEFtL16TjRY_ISxjE_0U6Q5-UpgY&callback=myMap"></script>
+		<script>
+			// Your web app's Firebase configuration
+			var firebaseConfig = {
+				apiKey: "AIzaSyDdmBpA5AtZW93Xv5hwQfRplfQlbVXEZko",
+				authDomain: "readyaimfireproject.firebaseapp.com",
+				databaseURL: "https://readyaimfireproject.firebaseio.com",
+				projectId: "readyaimfireproject",
+				storageBucket: "readyaimfireproject.appspot.com",
+				messagingSenderId: "1036997362149",
+				appId: "1:1036997362149:web:aa29322682be7ab7"
+			};
+			// Initialize Firebase
+			firebase.initializeApp(firebaseConfig);
+			var db = firebase.firestore();
+		</script>
+		<script>
+			var map;
+			var request = new XMLHttpRequest();
+			var data;
+			var dict = {};
+			
+			request.open('GET', 'http://172.16.220.154:3000/api/VolunteerIssue', true);
+			request.onload = function() {
+				data = JSON.parse(this.response);
+				data.sort(function(a, b){return b.submission_time - a.submission_time;});
+				if (request.status >= 200 && request.status < 400) {
+					var myStyles =[
+						{
+							featureType: "poi",
+							elementType: "labels",
+							stylers: [
+								{ visibility: "off" }
+							]
+						}
+					];
+					
+					var mapOptions = {
+						center: new google.maps.LatLng(0,0),
+						zoom: 8,
+						mapTypeId: google.maps.MapTypeId.ROADMAP,
+						mapTypeControl: false,
+						streetViewControl: false,
+						styles: myStyles 
+					}
+					map = new google.maps.Map(document.getElementById("map"), mapOptions);
+					
+					data.forEach(issue => {
+						var x = issue.issue_id;
+						dict[x] = issue;
+						
+						var datetime = new Date(parseInt(issue.submission_time));
+						$(".list-group-body").append('<li class="list-group-item list-group-item-action text-center cursor-pointer"  id="' + issue.issue_id + '" data-toggle="modal" data-target="#case-modal"><div class="row"><div class="col-3">' + datetime.getDate() + '/' + (datetime.getMonth() + 1) + '/' + datetime.getFullYear() + '</div><div class="col-3">' + datetime.getHours() + ":" + datetime.getMinutes() +'</div><div class="col-3">' + issue.address + '</div><div class="col-3">' + issue.category + '</div></div></li>');
+						
+						db.collection("issue").doc(issue.issue_id).get().then(function(doc) {
+							if (doc.exists) {
+								var pic = doc.data().image.toString();
+								var image = $("img#" + x);
+								
+								//console.log(image.attr('id'));
+								//console.log(pic);
+								dict[x].photo = pic;
+								//dict.push({Key:"pic",value:pic.toString()});
+							} else {
+								// doc.data() will be undefined in this case
+								console.log("No such document!");
+							}
+						}).catch(function(error) {
+							console.log("Error getting document:", error);
+						});
+						var cb = $("#" + x);
+						cb.click(function(){
+							$("#modal-image").attr('src', 'data:image/png;base64,' + dict[cb.attr('id')].photo);
+							$("#desc").text(dict[cb.attr('id')].comments);
+							$("#loc").text(dict[cb.attr('id')].address);
+							var icon = {
+								url: 'img/' + dict[cb.attr('id')].category + '-icon.png',
+								scaledSize: new google.maps.Size(35, 35)
+							}
+							var marker = new google.maps.Marker({position: new google.maps.LatLng(dict[cb.attr('id')].lat, dict[cb.attr('id')].lng), icon: icon});
+							marker.setMap(map);
+							map.setCenter(new google.maps.LatLng(dict[cb.attr('id')].lat, dict[cb.attr('id')].lng));
+							map.setZoom(8);
+							$("#date").text(formatdate(new Date(parseInt(dict[cb.attr('id')].submission_time))));
+							$("#state").text(dict[cb.attr('id')].status);
+						});
+						//x += 1;
+					});
+				} else {
+					console.log('error');
+				}
+				function formatdate(datetime){
+					return datetime.getDate() + "/" + (parseInt(datetime.getMonth()) + 1)	 + "/" + datetime.getFullYear() + " - " + datetime.getHours() + ":" + datetime.getMinutes(); 
+				};
+			}
+			request.send();
+		</script>
+		<script src="js/jquery-3.4.0.min.js"></script>
+		<script src="js/bootstrap.bundle.min.js"></script>
+	</body>
+</html>
