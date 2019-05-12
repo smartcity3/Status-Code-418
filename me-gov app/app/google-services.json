@@ -1,0 +1,73 @@
+{
+  "project_info": {
+    "project_number": "1036997362149",
+    "firebase_url": "https://readyaimfireproject.firebaseio.com",
+    "project_id": "readyaimfireproject",
+    "storage_bucket": "readyaimfireproject.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1036997362149:android:9d85e9d2e777ce10",
+        "android_client_info": {
+          "package_name": "com.raf.firespot"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1036997362149-ct4f3huthrqdaqct6itv93tbk6pnd6jf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCCSSBVEFtL16TjRY_ISxjE_0U6Q5-UpgY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1036997362149:android:2cb44a8d0bb6c844",
+        "android_client_info": {
+          "package_name": "com.raf.johnvrachnis.firespot"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1036997362149-ct4f3huthrqdaqct6itv93tbk6pnd6jf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCCSSBVEFtL16TjRY_ISxjE_0U6Q5-UpgY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

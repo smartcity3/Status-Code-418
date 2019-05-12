@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:isScrollContainer="true"
+    tools:context=".MapsActivity">
+
+    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:map="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".MapsActivity"
+        tools:layout_editor_absoluteX="-8dp"
+        tools:layout_editor_absoluteY="59dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:background="#5C000000"
+        android:focusable="auto"
+        android:maxHeight="400dp"
+        android:orientation="vertical"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHeight_max="400dp"
+        tools:layout_editor_absoluteX="0dp"
+        tools:visibility="visible">
+
+        <SearchView
+            style="@style/Widget.AppCompat.SearchView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="visible" />
+
+        <ScrollView
+            android:id="@+id/scrollView"
+            android:layout_width="match_parent"
+            android:layout_height="400dp"
+            android:visibility="gone"
+            tools:layout_editor_absoluteX="8dp"
+            tools:layout_editor_absoluteY="420dp">
+
+            <LinearLayout
+                android:id="@+id/events"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+        </ScrollView>
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/Button01"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left|bottom"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:padding="10dp"
+        android:paddingRight="10dp"
+        android:text="report"
+        app:layout_constraintBottom_toBottomOf="@+id/map"
+        app:layout_constraintEnd_toEndOf="@+id/map"
+        app:layout_constraintHorizontal_bias="0.511"
+        app:layout_constraintStart_toStartOf="@+id/map"
+        app:layout_constraintTop_toTopOf="@+id/map"
+        app:layout_constraintVertical_bias="0.023"
+        tools:visibility="visible" />
+
+    <Button
+        android:id="@+id/Button02"
+        android:layout_width="77dp"
+        android:layout_height="43dp"
+        android:layout_gravity="right|bottom"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="8dp"
+        android:enabled="true"
+        android:padding="10dp"
+        android:paddingRight="10dp"
+        android:text="Login"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="@+id/map"
+        app:layout_constraintHorizontal_bias="0.049"
+        app:layout_constraintStart_toStartOf="@+id/map"
+        app:layout_constraintTop_toTopOf="@+id/map"
+        tools:visibility="visible" />
+
+    <Button
+        android:id="@+id/volunteer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="20dp"
+        android:enabled="false"
+        android:text="Volunteer"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="gone" />
+
+</android.support.constraint.ConstraintLayout>
