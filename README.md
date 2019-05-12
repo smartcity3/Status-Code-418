@@ -16,3 +16,16 @@ Run the startFabric.sh and then run composer-playground. Select to deploy a new 
 
 #### For the app:
 Just change the IP address references to your Rest-API server IP.
+
+#### For the WebApp:
+Just change the API request IP address to your Rest-Api server.
+
+### Technologies Used:
+#####    Hyperledger Fabric
+#####    Hyperledger Composer
+#####    Composer Rest API
+#####    Android SDK
+##### Google Maps API
+#####    Google Geocode API
+#####    Bootstrap
+#####    Jquery
