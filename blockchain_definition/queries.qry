@@ -6,13 +6,13 @@ query selectOpenIssuesOfficial {
         WHERE (status != "Closed")
 }
 
+
 query selectOpenIssuesCitizen {
   description: "Select all open issues"
   statement:
       SELECT gr.municipality.mercury.Issue
-        WHERE (status != "Closed" & status != "Submitted")
+        WHERE (status != "Closed" AND status != "Submitted")
 }
-
 
 query selectSubmittedIssues {
   description: "Select all issues that have been submitted and not yet reviewed"
@@ -21,10 +21,9 @@ query selectSubmittedIssues {
        WHERE (status == "Submitted")
 }
 
-query select {
+query selectISSUEtransactions {
   description: "Select all issues that have been submitted and not yet reviewed"
   statement:
       SELECT gr.municipality.mercury.Issue
-       WHERE (status == "Submitted")
+       WHERE (municipality == _$data)
 }
-

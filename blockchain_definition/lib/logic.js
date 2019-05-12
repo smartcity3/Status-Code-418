@@ -1,4 +1,3 @@
-'use strict';
 
 /**
  *
@@ -51,10 +50,9 @@ async function CloseIssue(issue_to_close) {
  * @param {gr.municipality.mercury.volunteer_claim} issue_to_claim - claim transaction
  * @transaction
  */
-async function ClaimIssue(volunteer_claim) {
+async function ClaimIssue(issue_to_claim) {
     issue_to_claim.issue.status = 'Assigned_To_Volunteer';
-    issue_to_claim.issue.assigned_to_volunteer = issue_to_claim.volunteer;
-    let assetRegistry = await getAssetRegistry('gr.municipality.mercury.Issue');
+    let assetRegistry = await getAssetRegistry('gr.municipality.mercury.VolunteerIssue');
     await assetRegistry.update(issue_to_claim.issue);
 }
  
@@ -65,18 +63,17 @@ async function ClaimIssue(volunteer_claim) {
  */
 async function VolunteerCloseIssue(issue_to_close) {
     issue_to_close.issue.status = 'Closed';
-    issue_to_close.issue.closed_by = issue_to_close.volunteer;
-    let assetRegistry = await getAssetRegistry('gr.municipality.mercury.Issue');
+    let assetRegistry = await getAssetRegistry('gr.municipality.mercury.VolunteerIssue');
     await assetRegistry.update(issue_to_close.issue);
 }
 
 /**
  *
- * @param {gr.municipality.mercury.update_description} issue_description - close transaction
+ * @param {gr.municipality.mercury.update_description} open_issue_description - close transaction
  * @transaction
  */
-async function VolunteerCloseIssue(issue_description) {
-    issue_description.issue.comments = issue_description.newcomment;
+async function UpdateIssueDescription(open_issue_description) {
+    open_issue_description.issue.comments = open_issue_description.newcomment;
     let assetRegistry = await getAssetRegistry('gr.municipality.mercury.Issue');
-    await assetRegistry.update(issue_description.issue);
+    await assetRegistry.update(open_issue_description.issue);
 }

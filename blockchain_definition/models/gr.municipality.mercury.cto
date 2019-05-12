@@ -2,11 +2,12 @@
 namespace gr.municipality.mercury
 
 enum IssueType { 
-  o Natural_Disaster_Damage
-  o Light_Grid
-  o Water_Grid
-  o Biohazardous_Waste
-  o Waste_Infrastructure
+  o obstructive_flora
+  o electric_grid
+  o water_grid
+  o general_infrastructure
+  o biohazardous_waste
+  o road_infrastructure
 }
 
 /**
@@ -18,7 +19,7 @@ enum IssueStatus {
   o Assigned
   o Assigned_To_Volunteer
   o Fix_Under_Review
-  o Fixed
+  o Closed
 }
 
 /**
@@ -31,13 +32,13 @@ abstract participant User identified by email {
 }
 
 participant Municipality_Admin extends User {
-  --> Municipality Municipality
+  --> Municipality municipality
 }
 /**
  * A reviewer participant
  */
 participant Reviewer extends User {
-  --> Municipality Municipality
+  --> Municipality municipality
 }
 /**
  * A Submitter participant
@@ -48,30 +49,46 @@ participant Submitter extends User {
  * A technician participant
  */
 participant Technician extends User {
-  o String Department
+  o String department
 }
 /**
  * A technician participant
  */
 participant Volunteer identified by volunteer_id{
   o String volunteer_id
-  o String email
-  o String firstName
-  o String lastName
 }
-
+/**
+ * An issue asset
+ */
 asset Issue identified by issue_id {
   o String issue_id
-  o IssueStatus status
+  o IssueStatus status 
   o IssueType category
   o String comments
   o String municipality
   o String address
   o String photo
-  --> Volunteer assigned_to_volunteer optional
-  --> Reviewer reviewed_by optional
-  --> Technician assigned_to optional
-  --> Reviewer closed_by optional
+  o Double lat
+  o Double lng
+  o String submission_time
+  --> Reviewer reviewed_by 
+  --> Technician assigned_to 
+  --> Reviewer closed_by 
+}
+/**
+ * An issue asset
+ */
+asset VolunteerIssue identified by issue_id {
+  o String issue_id
+  o IssueStatus status 
+  o IssueType category
+  o String comments
+  o String municipality
+  o String address
+  o String photo
+  o Double lat
+  o Double lng
+  o String submission_time
 }
 /**
  * Municipality
@@ -89,6 +106,10 @@ abstract transaction update_issue {
   -->Issue issue 
 }
 
+abstract transaction volunteer_update_issue {
+  -->VolunteerIssue issue 
+}
+
 transaction review_issue extends update_issue {
   -->Reviewer reviewer
 }
@@ -104,13 +125,11 @@ transaction close_issue extends update_issue {
   -->Reviewer reviewer
 }
 
-transaction volunteer_claim extends update_issue {
-  -->Volunteer Volunteer
+transaction volunteer_claim extends volunteer_update_issue {
 }
 
 
-transaction volunteer_close extends update_issue {
-  -->Volunteer Volunteer
+transaction volunteer_close extends volunteer_update_issue {
 }
 
 transaction update_description extends update_issue {
