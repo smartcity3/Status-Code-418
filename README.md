@@ -18,4 +18,4 @@ Run the startFabric.sh and then run composer-playground. Select to deploy a new 
 Just change the IP address references to your Rest-API server IP.
 
 #### For the WebApp:
-Just open and use.
+Just change the API request IP address to your Rest-Api server.
